@@ -3,8 +3,14 @@ const capital = document.querySelector('#capital');
 const languages = document.querySelector('#languages');
 const population = document.querySelector('#population');
 const flag = document.querySelector('img');
+const submitButton = document.querySelector("submit-button");
+const guessForm = document.querySelector("#guess-form");
+const guessCounter = document.querySelector('#guess-counter')
+const nextButton = document.querySelector('.next');
 
+let counter = 0;
 
+let country = null;
 
 const apiUri = "https://restcountries.com/v3.1/name/"
 
@@ -18,13 +24,8 @@ const fetchCountryNames = async () => {
 
     data.forEach(country => {
         let name = country.name.common;
-        // name = name.replace(/\s+/g, '-').toLowerCase();
         countryNames.push(name);
     });
-
-    console.log(countryNames);
-    console.log(countryNames[20]);
-    console.log(countryNames[135]);
 }
 
 
@@ -34,13 +35,16 @@ const getCountryByName = async (countryName) => {
     const response = await fetch(apiUri + countryName);
     const data = await response.json();
 
-    console.log(data[0])
+    country = data;
+
+    // console.log(data[0])
     name.innerText = "Name: " + data[0].name.common;
-    capital.innerText = "Capital: " + data[0].capital;
+    capital.innerText = "Capital: Hidden";
     let getLanguages = Object.values(data[0].languages).join(", ");
     languages.innerText = "Languages: " + getLanguages;
     population.innerText = "Population: " + data[0].population;  
     flag.src = data[0].flags.svg;
+    console.log(data[0].capital);
 }
 
 
@@ -61,6 +65,42 @@ fetchCountryNames().then(() => {
     const randomCountryName = getRandomCountry();
     getCountryByName(randomCountryName);
 });
+
+const compareGuess = (country, guess) => {
+    if (country[0].capital == guess || country[0].capital.includes(guess)){
+        counter++;
+        capital.innerText = "Capital: " + country[0].capital + " Correct!";
+        guessCounter.innerText = counter;
+        //sets the button to false once selected so cant be submitted again for extra points.
+        document.querySelector('.submit').disabled = true;
+
+    }
+    if (country[0].capital != guess || !country[0].capital.includes(guess)){
+        capital.innerText = "Capital: " + "incorrect, guess again or move on."
+    }
+}
+
+
+nextButton.addEventListener("click", (event) => {
+    document.querySelector('.submit').disabled = false;
+    fetchCountryNames().then(() => {
+        const randomCountryName = getRandomCountry();
+        getCountryByName(randomCountryName);
+    });
+})
+
+guessForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    guess = document.querySelector('#guess').value;
+    console.log(guess);
+    compareGuess(country, guess);
+
+
+})
+
+
+
+
 
 
 
