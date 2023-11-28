@@ -18,7 +18,7 @@ const countryNames = [];
 
 
 const fetchCountryNames = async () => {
-    
+    try{
     const response = await fetch("https://restcountries.com/v3.1/all");
     const data = await response.json();
 
@@ -26,6 +26,10 @@ const fetchCountryNames = async () => {
         let name = country.name.common;
         countryNames.push(name);
     });
+} catch (error) {
+    alert(`Error connecting the endpoint ${error}`);
+}
+
 }
 
 
@@ -70,10 +74,9 @@ const compareGuess = (country, guess) => {
     if (country[0].capital == guess || country[0].capital.includes(guess)){
         counter++;
         capital.innerText = "Capital: " + country[0].capital + " Correct!";
-        guessCounter.innerText = counter;
+        guessCounter.innerText = "Points: " + counter;
         //sets the button to false once selected so cant be submitted again for extra points.
         document.querySelector('.submit').disabled = true;
-
     }
     if (country[0].capital != guess || !country[0].capital.includes(guess)){
         capital.innerText = "Capital: " + "incorrect, guess again or move on."
@@ -81,7 +84,7 @@ const compareGuess = (country, guess) => {
 }
 
 
-nextButton.addEventListener("click", (event) => {
+nextButton.addEventListener("click", () => {
     document.querySelector('.submit').disabled = false;
     fetchCountryNames().then(() => {
         const randomCountryName = getRandomCountry();
@@ -94,8 +97,6 @@ guessForm.addEventListener("submit", (event) => {
     guess = document.querySelector('#guess').value;
     console.log(guess);
     compareGuess(country, guess);
-
-
 })
 
 
