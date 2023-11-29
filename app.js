@@ -7,6 +7,7 @@ const submitButton = document.querySelector("submit-button");
 const guessForm = document.querySelector("#guess-form");
 const guessCounter = document.querySelector('#guess-counter')
 const nextButton = document.querySelector('.next');
+const revealButton = document.querySelector('.reveal-capital');
 
 let counter = 0;
 
@@ -99,6 +100,10 @@ guessForm.addEventListener("submit", (event) => {
     compareGuess(country, guess);
 })
 
+revealButton.addEventListener("click", (event) => {
+    document.querySelector('.submit').disabled = true;
+    capital.innerText = "Capital: " + country[0].capital;
+} )
 
 
 
