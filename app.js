@@ -28,7 +28,7 @@ const fetchCountryNames = async () => {
         countryNames.push(name);
     });
 } catch (error) {
-    alert(`Error connecting the endpoint ${error}`);
+    alert(`Error connecting to the endpoint ${error}`);
 }
 }
 
