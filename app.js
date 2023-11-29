@@ -30,7 +30,6 @@ const fetchCountryNames = async () => {
 } catch (error) {
     alert(`Error connecting the endpoint ${error}`);
 }
-
 }
 
 
@@ -40,16 +39,16 @@ const getCountryByName = async (countryName) => {
     const response = await fetch(apiUri + countryName);
     const data = await response.json();
 
-    country = data;
+    country = data[0];
 
     // console.log(data[0])
-    name.innerText = "Name: " + data[0].name.common;
+    name.innerText = "Name: " + country.name.common;
     capital.innerText = "Capital: Hidden";
-    let getLanguages = Object.values(data[0].languages).join(", ");
+    let getLanguages = Object.values(country.languages).join(", ");
     languages.innerText = "Languages: " + getLanguages;
-    population.innerText = "Population: " + data[0].population;  
-    flag.src = data[0].flags.svg;
-    console.log(data[0].capital);
+    population.innerText = "Population: " + country.population;  
+    flag.src = country.flags.svg;
+    console.log(country.capital);
 }
 
 
@@ -72,14 +71,14 @@ fetchCountryNames().then(() => {
 });
 
 const compareGuess = (country, guess) => {
-    if (country[0].capital == guess || country[0].capital.includes(guess)){
+    if (country.capital == guess || country.capital.includes(guess)){
         counter++;
-        capital.innerText = "Capital: " + country[0].capital + " Correct!";
+        capital.innerText = "Capital: " + country.capital + " Correct!";
         guessCounter.innerText = "Points: " + counter;
         //sets the button to false once selected so cant be submitted again for extra points.
         document.querySelector('.submit').disabled = true;
     }
-    if (country[0].capital != guess || !country[0].capital.includes(guess)){
+    if (country.capital != guess || !country.capital.includes(guess)){
         capital.innerText = "Capital: " + "incorrect, guess again or move on."
     }
 }
@@ -100,9 +99,9 @@ guessForm.addEventListener("submit", (event) => {
     compareGuess(country, guess);
 })
 
-revealButton.addEventListener("click", (event) => {
+revealButton.addEventListener("click", () => {
     document.querySelector('.submit').disabled = true;
-    capital.innerText = "Capital: " + country[0].capital;
+    capital.innerText = "Capital: " + country.capital;
 } )
 
 
